@@ -25,7 +25,6 @@ class Blacksmith::TTFAutoHint < Blacksmith::Executable
     
     def build_hinted_font(source, target)
       args = %w{
-        --latin-fallback
         --hinting-limit=200
         --hinting-range-max=50
         --symbol
