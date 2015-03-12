@@ -25,21 +25,27 @@ class Blacksmith::FontBuilder
       instance_eval(&@_instructions)
     end
     
-    font = Blacksmith::Font.new(@_attributes)
+    @font = Blacksmith::Font.new(@_attributes)
     
     @_glyphs.each do |filename, attrs|
-      attrs[:scale]  ||= font.scale
-      attrs[:offset] ||= font.offset
-      attrs[:source] ||= File.join(font.source, filename)
+      attrs[:scale]  ||= @font.scale
+      attrs[:offset] ||= @font.offset
+      attrs[:source] ||= File.join(@font.source, filename)
       
-      font << Blacksmith::Glyph.new(attrs)
+      @font << Blacksmith::Glyph.new(attrs)
     end
     
-    font
+    @font
   end
 
   def glyph(filename, attrs)
     @_glyphs[filename] = attrs
+  end
+  
+  def glyphs(code_enum)
+    Dir[File.join @font.source, '*.svg'].each do |f|
+      glyph File.basename(f), code: code_enum.next
+    end
   end
   
   def method_missing(name, *args)
